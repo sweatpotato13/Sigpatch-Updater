@@ -1,0 +1,21 @@
+# Created by https://www.toptal.com/developers/gitignore/api/c++,python
+# Edit at https://www.toptal.com/developers/gitignore?templates=c++,python
+
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+
+build/
+*.elf
+*.nacp
+*.nro
+
+# End of https://www.toptal.com/developers/gitignore/api/c++,python
