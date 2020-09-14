@@ -13,7 +13,7 @@
 #define APP_OUTPUT              "/switch/sigpatch-updater/sigpatch-updater.nro"
 #define OLD_APP_PATH            "/switch/sigpatch-updater.nro"
 
-#define APP_VERSION             "1.0.0"
+#define APP_VERSION             "1.1.0"
 #define CURSOR_LIST_MAX         2
 
 
@@ -102,8 +102,10 @@ int main(int argc, char **argv)
             switch (cursor)
             {
             case UP_SIGS:
-                if (downloadFile(AMS_SIG_URL, TEMP_FILE, OFF))
-                    unzip(TEMP_FILE);
+                if (downloadFile(AMS_SIG_URL, TEMP_ZIP, OFF)){
+                    unzip(TEMP_ZIP);
+                    remove(TEMP_ZIP);
+                }
                 else
                 {
                     printDisplay("Failed to download fusee-primary sigpatches\n");
@@ -111,8 +113,10 @@ int main(int argc, char **argv)
                 break;
 
             case UP_JOONIE:
-                if (downloadFile(HEKATE_SIG_URL, TEMP_FILE, OFF))
-                    unzip(TEMP_FILE);
+                if (downloadFile(HEKATE_SIG_URL, TEMP_ZIP, OFF)){
+                    unzip(TEMP_ZIP);
+                    remove(TEMP_ZIP);
+                }
                 else
                 {
                     printDisplay("Failed to download fusee-secondary sigpatches\n");
