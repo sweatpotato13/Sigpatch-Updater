@@ -15,4 +15,9 @@ Sigpatch-Updater homebrew for nintendo switch
 
 ## How to Build
 
-* Will update soon
+```
+git clone https://github.com/sweatpotato13/Sigpatch-Updater.git
+cd Sigpatch-Updater
+make
+```
+Before you build, you need to setup devkitpro environment
