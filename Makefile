@@ -39,7 +39,7 @@ include $(DEVKITPRO)/libnx/switch_rules
 #---------------------------------------------------------------------------------
 APP_TITLE   := 	Sigpatch-updater
 APP_AUTHOR  := 	CuteWisp
-APP_VERSION := 	1.1.0
+APP_VERSION := 	1.2.0
 
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build

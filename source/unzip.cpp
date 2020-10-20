@@ -15,7 +15,7 @@ int unzip(const char *output)
     unz_global_info gi = {0};
     unzGetGlobalInfo(zfile, &gi);
 
-    for (int i = 0; i < gi.number_entry; i++)
+    for (long unsigned int i = 0; i < gi.number_entry; i++)
     {
         char filename_inzip[MAXFILENAME] = {0};
         unz_file_info file_info = {0};

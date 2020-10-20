@@ -13,7 +13,7 @@
 #define APP_OUTPUT              "/switch/sigpatch-updater/sigpatch-updater.nro"
 #define OLD_APP_PATH            "/switch/sigpatch-updater.nro"
 
-#define APP_VERSION             "1.1.0"
+#define APP_VERSION             "1.2.0"
 #define CURSOR_LIST_MAX         2
 
 
@@ -23,7 +23,7 @@ const char *OPTION_LIST[] =
     "= Update Sigpatches for fusee-secondary (For Hekate Users)",
     "= Update this app"
 };
-
+                                   
 void refreshScreen(int cursor)
 {
     consoleClear();

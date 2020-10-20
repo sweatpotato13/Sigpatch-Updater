@@ -72,7 +72,7 @@ bool downloadFile(const char *url, const char *output, int api)
             printf("\n");
 
             ntwrk_struct_t chunk = {0};
-            chunk.data = malloc(_1MiB);
+            chunk.data = (u_int8_t*)malloc(_1MiB);
             chunk.data_size = _1MiB;
             chunk.out = fp;
 
