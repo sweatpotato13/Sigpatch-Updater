@@ -47,6 +47,7 @@ int versionCheck(){
     FILE * fp = fopen(VERSION_PATH, "rt");
     char buffer[20];
     fgets(buffer, sizeof(buffer),fp);
+    buffer[strlen(buffer) - 1] = '\0';
     if(strcmp(buffer, APP_VERSION)) return 0;
     else return 1;
 }
@@ -58,6 +59,9 @@ void refreshScreen(int cursor)
     printf("\x1B[36mSigpatch-Updater: v%s.\x1B[37m\n\n\n", APP_VERSION);
     if(!versionCheck()){
         printf("\x1B[31mNot latest version, need to update\x1B[37m\n\n\n");
+    }
+    else{
+        printf("\x1B[33mLatest version\x1B[37m\n\n\n");
     }
     printf("Press (A) to select option\n\n");
     printf("Press (+) to exit\n\n\n");
