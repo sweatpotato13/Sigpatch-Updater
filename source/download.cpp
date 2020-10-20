@@ -60,7 +60,7 @@ bool downloadFile(const char *url, const char *output, int api){
     if (curl){
         FILE *fp = fopen(output, "wb");
         if (fp){
-            printf("\n");
+            if (api == OFF) printf("\n");
 
             ntwrk_struct_t chunk = {0};
             chunk.data = (u_int8_t*)malloc(_1MiB);
@@ -91,7 +91,7 @@ bool downloadFile(const char *url, const char *output, int api){
             fclose(chunk.out);
 
             if (res == CURLE_OK){
-                printf("\n\ndownload complete!\n\n");
+                if (api == OFF) printf("\n\ndownload complete!\n\n");
                 consoleUpdate(NULL);
                 return true;
             }

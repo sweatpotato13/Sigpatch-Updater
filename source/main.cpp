@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <switch.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "download.h"
 #include "unzip.h"
@@ -10,10 +11,13 @@
 #define ROOT "/"
 #define APP_PATH "/switch/sigpatch-updater/"
 #define APP_OUTPUT "/switch/sigpatch-updater/sigpatch-updater.nro"
+#define VERSION_PATH "/switch/sigpatch-updater/version"
 #define OLD_APP_PATH "/switch/sigpatch-updater.nro"
 
 #define APP_VERSION "1.2.0"
 #define CURSOR_LIST_MAX 2
+
+bool vFlag = false;
 
 const char* OPTION_LIST[] = {
     "= Update Sigpatches for fusee-primary (For Atmosphere Users)",
@@ -21,26 +25,46 @@ const char* OPTION_LIST[] = {
     "= Update this app"
 };
 
-void refreshScreen(int cursor)
-{
-    consoleClear();
-
-    printf("\x1B[36mSigpatch-Updater: v%s.\x1B[37m\n\n\n", APP_VERSION);
-    printf("Press (A) to select option\n\n");
-    printf("Press (+) to exit\n\n\n");
-
-    for (int i = 0; i < CURSOR_LIST_MAX + 1; i++)
-        printf("[%c] %s\n\n", cursor == i ? 'X' : ' ', OPTION_LIST[i]);
-
-    consoleUpdate(NULL);
-}
-
 void printDisplay(const char* text, ...)
 {
     va_list v;
     va_start(v, text);
     vfprintf(stdout, text, v);
     va_end(v);
+    consoleUpdate(NULL);
+}
+
+int versionCheck(){
+    if(!vFlag){
+        if (downloadFile(VERSION_URL, VERSION_PATH, ON)){
+            vFlag = true;
+        }
+        else{
+            printDisplay("Failed to check updates\n");
+            return -1;
+        }
+    }
+    FILE * fp = fopen(VERSION_PATH, "rt");
+    char buffer[20];
+    fgets(buffer, sizeof(buffer),fp);
+    if(strcmp(buffer, APP_VERSION)) return 0;
+    else return 1;
+}
+
+void refreshScreen(int cursor)
+{
+    consoleClear();
+
+    printf("\x1B[36mSigpatch-Updater: v%s.\x1B[37m\n\n\n", APP_VERSION);
+    if(!versionCheck()){
+        printf("\x1B[31mNot latest version, need to update\x1B[37m\n\n\n");
+    }
+    printf("Press (A) to select option\n\n");
+    printf("Press (+) to exit\n\n\n");
+
+    for (int i = 0; i < CURSOR_LIST_MAX + 1; i++)
+        printf("[%c] %s\n\n", cursor == i ? 'X' : ' ', OPTION_LIST[i]);
+
     consoleUpdate(NULL);
 }
 
