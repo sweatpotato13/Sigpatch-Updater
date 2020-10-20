@@ -1,29 +1,26 @@
-#include <stdio.h>
-#include <stdarg.h>
-#include <unistd.h>
 #include <dirent.h>
+#include <stdarg.h>
+#include <stdio.h>
 #include <switch.h>
+#include <unistd.h>
 
 #include "download.h"
 #include "unzip.h"
 
+#define ROOT "/"
+#define APP_PATH "/switch/sigpatch-updater/"
+#define APP_OUTPUT "/switch/sigpatch-updater/sigpatch-updater.nro"
+#define OLD_APP_PATH "/switch/sigpatch-updater.nro"
 
-#define ROOT                    "/"
-#define APP_PATH                "/switch/sigpatch-updater/"
-#define APP_OUTPUT              "/switch/sigpatch-updater/sigpatch-updater.nro"
-#define OLD_APP_PATH            "/switch/sigpatch-updater.nro"
+#define APP_VERSION "1.2.0"
+#define CURSOR_LIST_MAX 2
 
-#define APP_VERSION             "1.2.0"
-#define CURSOR_LIST_MAX         2
-
-
-const char *OPTION_LIST[] =
-{
+const char* OPTION_LIST[] = {
     "= Update Sigpatches for fusee-primary (For Atmosphere Users)",
     "= Update Sigpatches for fusee-secondary (For Hekate Users)",
     "= Update this app"
 };
-                                   
+
 void refreshScreen(int cursor)
 {
     consoleClear();
@@ -38,7 +35,7 @@ void refreshScreen(int cursor)
     consoleUpdate(NULL);
 }
 
-void printDisplay(const char *text, ...)
+void printDisplay(const char* text, ...)
 {
     va_list v;
     va_start(v, text);
@@ -60,85 +57,71 @@ void appExit()
     consoleExit(NULL);
 }
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
-    // init stuff
     appInit();
     mkdir(APP_PATH, 0777);
 
-    // change directory to root (defaults to /switch/)
     chdir(ROOT);
 
-    // set the cursor position to 0
     short cursor = 0;
 
-    // main menu
     refreshScreen(cursor);
 
-    // muh loooooop
-    while(appletMainLoop())
-    {
+    while (appletMainLoop()) {
         hidScanInput();
         u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
 
-        // move cursor down...
-        if (kDown & KEY_DOWN)
-        {
-            if (cursor == CURSOR_LIST_MAX) cursor = 0;
-            else cursor++;
+        if (kDown & KEY_DOWN) {
+            if (cursor == CURSOR_LIST_MAX)
+                cursor = 0;
+            else
+                cursor++;
             refreshScreen(cursor);
         }
 
-        // move cursor up...
-        if (kDown & KEY_UP)
-        {
-            if (cursor == 0) cursor = CURSOR_LIST_MAX;
-            else cursor--;
+        if (kDown & KEY_UP) {
+            if (cursor == 0)
+                cursor = CURSOR_LIST_MAX;
+            else
+                cursor--;
             refreshScreen(cursor);
         }
 
-        if (kDown & KEY_A)
-        {
-            switch (cursor)
-            {
+        if (kDown & KEY_A) {
+            switch (cursor) {
             case UP_SIGS:
-                if (downloadFile(AMS_SIG_URL, TEMP_ZIP, OFF)){
+                if (downloadFile(AMS_SIG_URL, TEMP_ZIP, OFF)) {
                     unzip(TEMP_ZIP);
                     remove(TEMP_ZIP);
-                }
-                else
-                {
+                } else {
                     printDisplay("Failed to download fusee-primary sigpatches\n");
                 }
                 break;
 
             case UP_JOONIE:
-                if (downloadFile(HEKATE_SIG_URL, TEMP_ZIP, OFF)){
+                if (downloadFile(HEKATE_SIG_URL, TEMP_ZIP, OFF)) {
                     unzip(TEMP_ZIP);
                     remove(TEMP_ZIP);
-                }
-                else
-                {
+                } else {
                     printDisplay("Failed to download fusee-secondary sigpatches\n");
                 }
                 break;
 
             case UP_APP:
-                if (downloadFile(APP_URL, TEMP_FILE, OFF))
-                {
+                if (downloadFile(APP_URL, TEMP_FILE, OFF)) {
                     remove(APP_OUTPUT);
                     rename(TEMP_FILE, APP_OUTPUT);
                     remove(OLD_APP_PATH);
-                }
-                else
-                {
+                } else {
                     printDisplay("Failed to download app update\n");
                 }
                 break;
             }
         }
-        
-        if (kDown & KEY_PLUS) break;
+
+        if (kDown & KEY_PLUS)
+            break;
     }
 
     appExit();

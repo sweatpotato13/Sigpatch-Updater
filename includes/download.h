@@ -7,14 +7,11 @@
 #define TEMP_FILE       "/switch/sigpatch-updater/temp"
 #define TEMP_ZIP        "/switch/sigpatch-updater/temp.zip"
 
-
 #define ON              1
 #define OFF             0
 
-
 #include <stdbool.h>
 
-//
 bool downloadFile(const char *url, const char *output, int api);
 
 #endif
